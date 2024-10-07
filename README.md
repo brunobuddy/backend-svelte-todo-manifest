@@ -2,9 +2,9 @@
   <img src="https://github.com/user-attachments/assets/774b5fbd-a1e8-4912-9b2a-b852af65e0d2" alt="TODO App screenshot Svelte">
 </p>
 
-# Demo TODO App fullstack: Svelte + Manifest 
+# Demo TODO App fullstack: Svelte + Manifest 🧡🦚
 
-This repository showcases a demo of a small **todo application** combining [Svelte](https://svelte.dev/) as a frontend and [Manifest](https://manifest/build) as backend.
+This repository showcases a demo of a small **todo application** combining [Svelte](https://svelte.dev/) as a frontend and [Manifest](https://manifest.build) as backend.
 
 The backend consists in only a few lines of code:
 
