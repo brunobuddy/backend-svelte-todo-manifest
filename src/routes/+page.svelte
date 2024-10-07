@@ -55,7 +55,8 @@
     placeholder="Add a new task..."
     on:keydown={(e) => (e.key === "Enter" ? addTodo() : null)}
   />
-  <button on:click={addTodo}>Add Todo</button>
+
+  <button on:click={addTodo} style="margin-top: 10px;">Add Todo</button>
 
   <!-- Display todo list -->
   <ul>
