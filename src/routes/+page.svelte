@@ -1,22 +1,47 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import Manifest from "@mnfst/sdk";
 
-  let todos: { id: number; title: string; completed: Boolean }[] = [];
+  // Initialize the Manifest SDK.
+  const manifest = new Manifest();
+
+  // Define the Todo type.
+  type Todo = { id: number; title: string; completed: boolean };
+  let todos: Todo[] = [];
   let newTodo = "";
 
-  function addTodo() {
-    if (newTodo.trim()) {
-      todos = [...todos, { id: Date.now(), text: newTodo, completed: false }];
-      newTodo = "";
-    }
+  // Fetch all todos on component mount.
+  onMount(async () => {
+    getTodos();
+  });
+
+  // Fetch all todos from the database.
+  async function getTodos() {
+    todos = (await manifest.from("todos").find()).data as Todo[];
   }
 
-  function removeTodo(id) {
+  // Add a new todo to the database.
+  async function addTodo() {
+    await manifest.from("todos").create({ title: newTodo, completed: false });
+
+    // Fetch all todos again to update the list
+    getTodos();
+  }
+
+  // Remove a todo from the database.
+  async function removeTodo(id: number) {
+    await manifest.from("todos").delete(id);
     todos = todos.filter((todo) => todo.id !== id);
   }
 
-  function toggleTodoCompletion(todo) {
-    todo.completed = !todo.completed;
+  // Toggle the completion status of a todo.
+  async function toggleTodoCompletion(todo: Todo) {
+    // Update the todo in the database.
+    const updatedTodo = { ...todo, completed: !todo.completed };
+    todo = await manifest.from("todos").update(todo.id, todo);
+
+    // Reassign the array to trigger update in the UI.
+    todos = todos.map((t) => (t.id === updatedTodo.id ? updatedTodo : t));
   }
 </script>
 
@@ -41,7 +66,7 @@
           checked={todo.completed}
           on:click={() => toggleTodoCompletion(todo)}
         />
-        {todo.text}
+        {todo.title}
         <button on:click={() => removeTodo(todo.id)}>Remove</button>
       </li>
     {/each}
